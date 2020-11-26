@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:morse/morse.dart';
+
 
 
 void main() {
@@ -18,7 +20,17 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var b;
+final inputcontroller = TextEditingController();
+var message = "";
+final Morse morse = new Morse();
   @override
   Widget build(BuildContext context) {
     // Scaffold is a layout for the major Material Components.
@@ -48,18 +60,35 @@ class MyApp extends StatelessWidget {
             top: 140,left: 5,
             child: Container(
               child: Container(
-                child : TextField(
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 25,color: Colors.white),
-                    hintText: 'Enter your Text',
-                    suffixIcon: Container(child: IconButton(icon: Icon(Icons.cancel,), onPressed: (){})),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(50),
-                  ),
+                child : Column(
+                  children: [
+                    TextField(
+                      controller: inputcontroller,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                      ),
+                      decoration: InputDecoration(
+                        hintStyle: TextStyle(fontSize: 25,color: Colors.white),
+                        hintText: 'Enter your Text',
+                        suffixIcon: Container(child: IconButton(icon: Icon(Icons.cancel,),
+                            onPressed: ()=>inputcontroller.clear(),)),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(50),
+                      ),
+                    ),
+                    MaterialButton(onPressed: (){
+                      setState(() {
+                        b = morse.encode(inputcontroller.text);
+                        setState(() {
+                          message = b;
+                        });
+                      });
+                    },
+                      child: Icon(Icons.send,size: 25,),
+
+                    ),
+                  ],
                 ),
                 alignment: Alignment.topCenter,
               ),
@@ -93,7 +122,7 @@ class MyApp extends StatelessWidget {
               color: Color(0xffC9F2DB),
           ),
           ),
-         
+
           Positioned(
             left: 6,top: 320,
             child: Container(
@@ -119,21 +148,23 @@ class MyApp extends StatelessWidget {
             top : 370,left: 5,
             child: Container(
               child: Container(
-                child : TextField(
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 25,color: Colors.white),
-                    hintText: 'Output Text',
-                    suffixIcon: Icon(Icons.cancel,color: Colors.white24),
-
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(80),
+                child : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0,right: 5.0,bottom: 0.0),
+                     child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 33,
+                      height: 5.5,
                   ),
                 ),
-                alignment: Alignment.topLeft
+              ),
+                  ],
+                ),
+                alignment: Alignment.center,
               ),
               decoration: BoxDecoration(
                  color: Color(0xff546e7a),
